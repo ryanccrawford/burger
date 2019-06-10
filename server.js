@@ -60,6 +60,7 @@ app.post("/api/addBurger", function (req, res) {
         console.log({
              id: result.insertId
         });
+        res.redirect("/")
         res.json({
             id: result.insertId
         });
@@ -77,6 +78,7 @@ app.put("/api/eatBurger/:id", function (req, res) {
             return res.status(404).end();
         }
         if (result.changedRows) {
+            res.redirect("/")
             res.json({
                 success: result.changedRows ? true : false
             });

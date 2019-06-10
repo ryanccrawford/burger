@@ -1,110 +1,82 @@
-<di
+<div class="container">
+  
+<div class="section">
 <h1>Burger Time</h1>
-
-
-
+</div>
+<section>
 <div class="burgers">
- 
 
   {{#each burgers}}
   
   {{#if this.devoured}}
-<div class="eaten-burger">
-
+<div class="float-left not-eaten-burger">
 </div>
-  
+<div class="float-right eaten-burger">
+<span>That was a yummy {{this.burger_name}}</span>
+</div>
   {{else}}
- 
-<div class="not-eaten-burger">
-
+<div class="float-left not-eaten-burger">
+<span>{{this.burger_name}}</span><button data-burgerid="{{this.id}}" class="eat-burger">Eat Burger</button>
 </div>
-
+<div class="float-right eaten-burger">
+<span></span>
+</div>
   {{/if}}
   
-  <button data-movieid="{{this.id}}" class="delmovie">Delete Movie!</button>
-  
   {{else}}
+  <div>No Burgers Added</div>
   {{/each}}
 </div>
-
-<h2>Create a Burger</h2>
-<form id="createmovie" class="button-size">
-  <textarea type="text" name="movie"></textarea>
-  <button type="submit">Save Movie!</button>
+</section>
+<section>
+  <div class="row">
+    <div class="card col">
+      
+      <h2>Create a Burger</h2>
+<form id="createburger" class="form-inline">
+   <div class="form-group">
+     <label for="burger-name">Burger Name</label>
+      <input class="form-control" type="text" name="name">
+  </div>
+   <button type="submit" class="btn btn-primary mb-2"><img class="icon" src="/public/assets/images/burger-button.png"> Create Burger</button>
 </form>
-
-<h2>Update a Movie</h2>
-<form id="updatemovie" class="button-size">
-  <select name="id">
-		{{#each movies}}
-			<option value="{{this.id}}">{{this.movie}}</option>
-		{{/each}}
-	</select>
-  <input type="text" name="movie" placeholder="movie"></input>
-  <button type="submit">Update Movie!</button>
-</form>
-
+</div>
+</div>
+</section>
+</div>
 <script type="text/javascript">
 $(document).ready(function(){
 
-  $(".delmovie").on("click", function (event) {
-    // Get the ID from the button.
-    // This is shorthand for $(this).attr("data-movieid")
-    var id = $(this).data("movieid");
 
-    // Send the DELETE request.
-    $.ajax("/api/movies/" + id, {
-      type: "DELETE"
-    }).then(
-      function () {
-        console.log("deleted id ", id);
-        // Reload the page to get the updated list
-        location.reload();
-      }
-    );
-  });
-
-  $("#createmovie").on("submit", function (event) {
-    // Make sure to preventDefault on a submit event.
+  $("#createburger").on("submit", function (event) {
     event.preventDefault();
 
-    // [name=movie] will find an element with a "name" attribute equal to the string "movie"
-    var newMovie = {
-      movie: $("#createmovie [name=movie]").val().trim()
-    };
+    var name = $('#createburger [name=name]').val().trim()
+    var newBurger = {
+      name: name
+    }
 
-    // Send the POST request.
-    $.ajax("/api/movies", {
+    $.ajax("/api/addBurger", {
       type: "POST",
-      data: newMovie
+      data: newBurger
     }).then(
       function () {
-        console.log("created new movie");
-        // Reload the page to get the updated list
+        console.log("created new burger");
         location.reload();
       }
     );
   });
 
-  $("#updatemovie").on("submit", function (event) {
-    // Make sure to preventDefault on a submit event.
+  $(".eat-burger").on("click", function (event) {
     event.preventDefault();
 
-    // Get the ID by finding an element with a "name" attribute equal to the string "id"
-    var id = $("[name=id]").val().trim();
+    var id = $(event.target).attr('data-burgerid').trim();
 
-    var updatedMovie = {
-      movie: $("#updatemovie [name=movie]").val().trim()
-    };
-
-    // Send the PUT request.
-    $.ajax("/api/movies/" + id, {
-      type: "PUT",
-      data: updatedMovie
+    $.ajax("/api/eatBurger/" + id, {
+      type: "PUT"
     }).then(
       function () {
-        console.log("updated id ", id);
-        // Reload the page to get the updated list
+        console.log("Burger Eaten id ", id);
         location.reload();
       }
     );
