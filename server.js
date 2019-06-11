@@ -19,11 +19,11 @@ app.set("view engine", "handlebars");
 var con = {}
 if (process.env.PORT) {
     con = {
-        host: "ui0tj7jn8pyv9lp6.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
+        host: "us-cdbr-iron-east-02.cleardb.net",
         port: 3306,
-        user: "xeg4boq50he7ye0g",
-        password: "cnfjok7fw46nhicd",
-        database: "burgers_db"
+        user: "b813458a780ba2",
+        password: "6c076ffa",
+        database: "heroku_efc63d0c2f5b0a1"
     }
 } else {
     con = {
