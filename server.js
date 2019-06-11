@@ -1,6 +1,9 @@
 const express = require("express")
 const exphbs = require("express-handlebars")
 const mysql = require("mysql")
+// const Sequelize = require('sequelize');
+
+
 
 var app = express();
 var PORT = process.env.PORT || 8080;
@@ -9,6 +12,7 @@ app.use(express.urlencoded({
     extended: true
 }));
 app.use(express.json());
+app.use(express.static('public'))
 app.engine("handlebars", exphbs({
     defaultLayout: "main"
 }));
@@ -21,7 +25,30 @@ var connection = mysql.createConnection({
     password: "Rcc083178",
     database: "burgers_db"
 })
+// const sequelize = new Sequelize('burgers_db', 'root', 'Rcc083178', {
+//     host: 'localhost',
+//     dialect: 'mysql'
+// });
 
+// const Burgers = sequelize.define('burgers', {
+//     // attributes
+//     id: {
+//         type: Sequelize.INTEGER,
+//         allowNull: false
+//     },
+//     burger_name: {
+//         type: Sequelize.STRING,
+//         allowNull:false
+//     },
+//     devoured: {
+//         type: Sequelize.BOOLEAN,
+//         allowNull: false,
+//         defaultValue: 0
+//     }
+
+// }, {
+//     // options
+// });
 connection.connect(function (err) {
     if (err) {
         console.error("error connecting: " + err.stack)
@@ -34,22 +61,20 @@ app.get("/", function (req, res) {
 
     var sql = `SELECT * FROM burgers`
 
-    this.connection.query(sql, function (err, data) {
+    connection.query(sql, function (err, data) {
         if (err) {
             return res.status(500).end();
         }
-
+         
         res.render("index", {
             burgers: data
         });
     });
 
 });
-app.get("/index.html", function (req, res) {
-    res.redirect("/")
-});
 
-app.post("/api/addBurger", function (req, res) {
+
+app.post("/api/addburger", function (req, res) {
 
     var name = req.body.name
 
@@ -60,31 +85,37 @@ app.post("/api/addBurger", function (req, res) {
         console.log({
              id: result.insertId
         });
+    
         res.redirect("/")
-        res.json({
-            id: result.insertId
-        });
+        // res.json({
+        //     id: result.insertId
+        // });
     });
 });
 
-app.put("/api/eatBurger/:id", function (req, res) {
-
-    var id = req.params.id
+app.get("/api/eatburger/:id", function (req, res) {
+    console.log(req)
+    var id = parseInt(req.params.id)
+  
+    console.log(id)
 
     connection.query("UPDATE burgers SET devoured=1 WHERE id = ?", [id], function (err, result) {
         if (err) {
-            return res.status(500).end();
-        } else if (result.changedRows === 0) {
-            return res.status(404).end();
-        }
-        if (result.changedRows) {
-            res.redirect("/")
-            res.json({
-                success: result.changedRows ? true : false
-            });
-        }
+            throw err
+        
+            // return res.status(500).end();
+        } 
+        console.log(result)
+    //    console.log(res.location())
+      
+     res.redirect("/")
+            // res.json({
+            //     success: result.changedRows ? true : false
+            // });
+        
     });
 })
+
 
 app.listen(PORT, function () {
     console.log("Server listening on PORT: " + PORT);
