@@ -7,7 +7,6 @@ const mysql = require("mysql")
 
 var app = express();
 var PORT = process.env.PORT || 8080;
-
 app.use(express.urlencoded({
     extended: true
 }));
@@ -17,14 +16,25 @@ app.engine("handlebars", exphbs({
     defaultLayout: "main"
 }));
 app.set("view engine", "handlebars");
-
-var connection = mysql.createConnection({
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    password: "Rcc083178",
-    database: "burgers_db"
-})
+var con = {}
+if (process.env.PORT) {
+    con = {
+        host: "ui0tj7jn8pyv9lp6.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
+        port: 3306,
+        user: "xeg4boq50he7ye0g",
+        password: "cnfjok7fw46nhicd",
+        database: "burgers_db"
+    }
+} else {
+    con = {
+        host: "localhost",
+        port: 3306,
+        user: "root",
+        password: "Rcc083178",
+        database: "burgers_db"
+    }
+}
+var connection = mysql.createConnection(con)
 // const sequelize = new Sequelize('burgers_db', 'root', 'Rcc083178', {
 //     host: 'localhost',
 //     dialect: 'mysql'
