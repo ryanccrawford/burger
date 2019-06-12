@@ -1,8 +1,9 @@
+var PORT = process.env.PORT || 3000;
 const express = require("express")
 const exphbs = require("express-handlebars")
 const routes = require("./controllers/burgers_controller.js");
 
-var PORT = process.env.PORT || 3000;
+
 
 var app = express()
 app.use(express.static('public'))
