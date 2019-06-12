@@ -1,13 +1,17 @@
-const mysql = require("mysql2")
+const mysql = require("mysql")
 
     var con = {}
-    if (process.env.PORT) {
+    if (process.env..PORT) {
         con = {
-            host: "us-cdbr-iron-east-02.cleardb.net",
+            //host: "us-cdbr-iron-east-02.cleardb.net",
+            host: "gmgcjwawatv599gq.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
             port: 3306,
-            user: "b813458a780ba2",
-            password: "6c076ffa",
-            database: "heroku_efc63d0c2f5b0a1"
+           // user: "b813458a780ba2",
+           // password: "6c076ffa",
+             user: "yqr1358ag59b86t2",
+                 password: "o086x03u31yvacsx",
+           // database: "heroku_efc63d0c2f5b0a1",
+            database: "mfprp122v8lffehd"
         }
     } else {
         con = {
