@@ -1,55 +1,34 @@
-var connection = require("connection")
+const connection = require("../config/connection.js")
+var orm = {
+    read: function (col, table, callback) {
 
-var orm = function ORM() {
-    this.connection = connection
-    this.selectAll = function (res) {
+        var sql = "SELECT ?? FROM ??"
 
-        var sql = `SELECT * FROM burger_name`
-
-        this.connection.query(sql, function (err, data) {
+        connection.query(sql, [col, table], function (err, data) {
             if (err) {
-                return res.status(500).end();
+                throw err
             }
-
-            res.render("index", {
-                burgers: data
-            });
-        });
-
-
-
-    }
-    this.insertOne = function (insertData, res) {
-        this.connection.query("INSERT INTO plans (plan) VALUES (?)", [insertData], function (err, result) {
+            callback(data)
+        })
+    },
+    create: function (table, cols, colvalues, callback) {
+        var sql = "INSERT INTO ?? (??) VALUES (?)"
+        connection.query(sql, [table, cols, colvalues], function (err, result) {
             if (err) {
-                return res.status(500).end();
+                throw err
             }
-
-            // Send back the ID of the new plan
-            res.json({
-                id: result.insertId
-            });
-            console.log({
-                id: result.insertId
-            });
-        });
-
-
-
-    }
-    this.updateOne = function (id, updateData, res) {
-        this.connection.query("UPDATE plans SET plan = ? WHERE id = ?", [updateData, id], function (err, result) {
+            callback(result)
+        })
+    },
+    update: function (table, col, value, col2, idvalue, callback) {
+        var sql = "UPDATE ?? SET ??=? WHERE ??=?"
+        connection.query(sql, [table, col, value, col2, idvalue], function (err, result) {
             if (err) {
-                // If an error occurred, send a generic server failure
-                return res.status(500).end();
-            } else if (result.changedRows === 0) {
-                // If no rows were changed, then the ID must not exist, so 404
-                return res.status(404).end();
+                throw err
             }
-            res.status(200).end();
-
-        });
+            callback(result)
+        })
     }
 }
 
-module.exports.orm = ORM
+module.exports = orm

@@ -1,47 +1,36 @@
-const express = require("express");
-const burger = require("../models/burger")
-const exphbs = require("express-handlebars");
-
-var app = express();
-var PORT = process.env.PORT || 8080;
-
-app.use(express.urlencoded({
-        extended: true
-}));
-app.use(express.json());
+const express = require("express")
+const burger = require("../models/burger.js")
+var router = express.Router()
 
 
-    //load handlebars view engine
-app.engine("handlebars", exphbs({
-        defaultLayout: "main"
-    }));
-app.set("view engine", "handlebars");
+router.get("/", function (req, res) {
+    burger.getBurgers(function (data) {
+        var hbsObject = {
+            burgers: data
+        }
+        console.log(hbsObject);
+        res.render("index", hbsObject)
+    })
+})
 
-var router = app.Router()
+router.post("/api/addburger", function (req, res) {
+    var burgerName = req.body.burger_name
+    burger.createBurger(burgerName, function (result) {
+        res.json({
+            id: result.insertId
+        })
+    })
+})
 
+router.put("/api/eatburger/:id", function (req, res) {
+    var id = req.params.id
+    burger.devouerBurger(id, function (result) {
+        if (result.changedRows == 0) {
+            return res.status(404).end()
+        } else {
+            res.status(200).end()
+        }
+    })
+})
 
-
-    router.get("/", function (req, res) {
-
-
-    });
-    router.get("/index.html", function (req, res) {
-
-
-    });
-
-    router.post("/api/getBurgers", function (req, res) {
-
-
-    });
-
-    router.put("/api/eatBurger/:id", function (req, res) {
-
-
-    });
-
-    router.listen(PORT, function () {
-        console.log("Server listening on PORT: " + PORT);
-    });
-
- module.exports = router
+module.exports = router
