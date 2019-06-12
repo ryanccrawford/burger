@@ -1,7 +1,7 @@
 const mysql = require("mysql")
 
     var con = {}
-    if (process.env.PORT) {
+    if (PORT != 3000) {
         con = {
             //host: "us-cdbr-iron-east-02.cleardb.net",
             host: "gmgcjwawatv599gq.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
