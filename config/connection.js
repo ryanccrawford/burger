@@ -22,9 +22,9 @@ const mysql = require("mysql")
             database: "burgers_db"
         }
     }
-    
+    console.log(con)
 var connection = mysql.createConnection(con)
-    
+    console.log(connection)
 connection.connect(function (err) {
     if (err) {
         console.error("error connecting: " + err.stack);
