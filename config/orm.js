@@ -2,9 +2,9 @@ const connection = require("../config/connection.js")
 var orm = {
     read: function (col, table, callback) {
 
-        var sql = "SELECT ?? FROM ??"
+        var sql = "SELECT * FROM ??"
 
-        connection.query(sql, [col, table], function (err, data) {
+        connection.query(sql, [table], function (err, data) {
             if (err) {
                 throw err
             }
