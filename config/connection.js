@@ -6,8 +6,8 @@ if ((process.env.PORT || 3000) != 3000) {
   con = {
     host: "gmgcjwawatv599gq.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
     port: 3306,
-    user: private.mysqlPrivate.usernameRemote,
-    password: private.mysqlPrivate.passwordRemote,
+    user: process.env.MYSQL_USER_REMOTE,
+    password: process.env.MYSQL_PASSWORD_REMOTE,
     database: "mfprp122v8lffehd"
   };
 } else {
